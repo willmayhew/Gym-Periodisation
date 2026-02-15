@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GymPeriodisation.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9ef7bda15d7fd81fceb5a7029114b998a02937cb")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8c165db7abe7b3c416da56e450fabfffb255f26a")]
 [assembly: System.Reflection.AssemblyProductAttribute("GymPeriodisation.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GymPeriodisation.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

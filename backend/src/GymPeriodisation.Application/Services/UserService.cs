@@ -1,6 +1,6 @@
 ﻿using GymPeriodisation.Application.DTOs.Users;
 using GymPeriodisation.Application.Interfaces;
-using GymPeriodisation.Application.ServiceInterfaces;
+using GymPeriodisation.Application.Services.Interfaces;
 using GymPeriodisation.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -20,11 +20,17 @@ namespace GymPeriodisation.Application.Services
             _userRepository = userRepository;
         }
 
+        /// <summary>
+        /// Gets all users.
+        /// </summary>
         public async Task<List<User>> GetUsers()
         {
             return await _userRepository.GetAllAsync();
         }
 
+        /// <summary>
+        /// Creates a user.
+        /// </summary>
         public async Task CreateUser(CreateUserDto userDto)
         {
             var user = new User

@@ -1,7 +1,7 @@
 ﻿using GymPeriodisation.Application.DTOs.Workouts;
 using GymPeriodisation.Application.Interfaces;
-using GymPeriodisation.Application.ServiceInterfaces;
 using GymPeriodisation.Application.Services;
+using GymPeriodisation.Application.Services.Interfaces;
 using GymPeriodisation.Domain.Entities;
 using GymPeriodisation.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Http;

@@ -1,7 +1,7 @@
 ﻿using GymPeriodisation.Application.Interfaces;
 using GymPeriodisation.Application.RepositoryInterfaces;
-using GymPeriodisation.Application.ServiceInterfaces;
 using GymPeriodisation.Application.Services;
+using GymPeriodisation.Application.Services.Interfaces;
 using GymPeriodisation.Infrastructure.Persistence;
 using GymPeriodisation.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;

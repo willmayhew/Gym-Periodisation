@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace GymPeriodisation.Application.ServiceInterfaces
+namespace GymPeriodisation.Application.Services.Interfaces
 {
     public interface IUserService
     {

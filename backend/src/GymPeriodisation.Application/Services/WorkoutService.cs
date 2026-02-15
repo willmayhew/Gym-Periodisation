@@ -1,7 +1,8 @@
 ﻿using GymPeriodisation.Application.DTOs.Workouts;
+using GymPeriodisation.Application.Exceptions;
 using GymPeriodisation.Application.Interfaces;
 using GymPeriodisation.Application.RepositoryInterfaces;
-using GymPeriodisation.Application.ServiceInterfaces;
+using GymPeriodisation.Application.Services.Interfaces;
 using GymPeriodisation.Domain.Entities;
 
 namespace GymPeriodisation.Application.Services;
@@ -23,6 +24,12 @@ public class WorkoutService : IWorkoutService
         _muscleRepository = muscleRepository;
     }
 
+    /// <summary>
+    /// Workout is created
+    /// An active workout is determined via whether a date ended exists.
+    /// </summary>
+    /// <param name="workoutDto"></param>
+    /// <returns></returns>
     public async Task StartWorkoutAsync(CreateWorkoutDto workoutDto)
     {
         var workout = new Workout
@@ -36,6 +43,9 @@ public class WorkoutService : IWorkoutService
         await _workoutRepository.AddAsync(workout);
     }
 
+    /// <summary>
+    /// Workout is ended by setting a date end.
+    /// </summary>
     public async Task EndWorkoutAsync(int id, EndWorkoutDto workoutDto)
     {
         var workout = await ValidateWorkoutAsync(id);
@@ -46,11 +56,21 @@ public class WorkoutService : IWorkoutService
         await _workoutRepository.SaveChangesAsync();
     }
 
+    /// <summary>
+    /// Gets all of a users active and past workouts.
+    /// </summary>
     public async Task<List<Workout>> GetUserWorkoutsAsync(int userId)
     {
         return await _workoutRepository.GetByUserIdAsync(userId);
     }
 
+    /// <summary>
+    /// Saves the workout sent.
+    /// Used for adding exercises to an active workout.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="workoutDto"></param>
+    /// <returns></returns>
     public async Task SaveWorkoutAsync(int id, SaveWorkoutDto workoutDto)
     {
         var workout = await ValidateWorkoutAsync(id);
@@ -107,23 +127,31 @@ public class WorkoutService : IWorkoutService
     }
 
 
+    /// <summary>
+    /// Checks whether a workout exists and is active.
+    /// </summary>
     private async Task<Workout> ValidateWorkoutAsync(int id)
     {
         var workout = await _workoutRepository.GetByIdAsync(id);
 
         if (workout == null)
         {
-            throw new Exception("Workout not found");
+            throw new NotFoundException("Workout not found");
         }
 
         if (workout.DateEnded != null)
         {
-            throw new Exception("Workout already ended");
+            throw new ValidationException("Workout already ended");
         }
 
         return workout;
     }
 
+    /// <summary>
+    /// Gets a workout from the Id.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     public async Task<WorkoutResponseDto?> GetWorkoutByIdAsync(int id)
     {
         var workout = await _workoutRepository.GetByIdAsync(id);

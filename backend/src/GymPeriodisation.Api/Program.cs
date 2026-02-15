@@ -1,3 +1,4 @@
+using GymPeriodisation.Api.Middleware;
 using GymPeriodisation.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,5 +30,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.MapControllers();
+app.UseMiddleware<GlobalExceptionMiddleware>();
 
 app.Run();
