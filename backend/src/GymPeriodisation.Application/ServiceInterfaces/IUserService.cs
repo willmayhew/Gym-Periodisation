@@ -11,5 +11,8 @@ namespace GymPeriodisation.Application.ServiceInterfaces
         Task StartWorkoutAsync(CreateWorkoutDto workout);
         Task EndWorkoutAsync(int id, EndWorkoutDto workout);
         Task<List<Workout>> GetUserWorkoutsAsync(int id);
+
+        Task SaveWorkoutAsync(int id, SaveWorkoutDto workout);
+        Task<WorkoutResponseDto?> GetWorkoutByIdAsync(int id);
     }
 }

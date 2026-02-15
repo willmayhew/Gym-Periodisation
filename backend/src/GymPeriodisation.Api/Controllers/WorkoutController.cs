@@ -20,7 +20,7 @@ namespace GymPeriodisation.Api.Controllers
             _workoutService = workoutService;
         }
 
-        [HttpPost("start")]
+        [HttpPost]
         public async Task<IActionResult> StartWorkout(CreateWorkoutDto workout)
         {
             await _workoutService.StartWorkoutAsync(workout);
@@ -28,7 +28,7 @@ namespace GymPeriodisation.Api.Controllers
         }
 
         [HttpPost("{id}/end")]
-        public async Task<IActionResult> EndWorkout(int id, [FromBody] EndWorkoutDto workout)
+        public async Task<IActionResult> EndWorkout([FromRoute] int id, [FromBody] EndWorkoutDto workout)
         {
             await _workoutService.EndWorkoutAsync(id, workout);
             return NoContent();
@@ -38,6 +38,24 @@ namespace GymPeriodisation.Api.Controllers
         public async Task<IActionResult> GetUserWorkouts([FromRoute] int userId)
         {
             var workout = await _workoutService.GetUserWorkoutsAsync(userId);
+            return Ok(workout);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> SaveWorkout([FromRoute] int id, [FromBody] SaveWorkoutDto workout)
+        {
+            await _workoutService.SaveWorkoutAsync(id, workout);
+            return NoContent();
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetWorkoutById([FromRoute] int id)
+        {
+            var workout = await _workoutService.GetWorkoutByIdAsync(id);
+            if (workout == null)
+            {
+                return NotFound();
+            }
             return Ok(workout);
         }
     }

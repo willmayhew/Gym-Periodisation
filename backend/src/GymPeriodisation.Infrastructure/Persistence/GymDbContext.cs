@@ -26,5 +26,10 @@ public class GymDbContext : DbContext
             .HasMany(e => e.MuscleGroups)
             .WithMany(m => m.Exercises)
             .UsingEntity(j => j.ToTable("ExerciseMuscles"));
+
+        modelBuilder.Entity<Exercise>()
+            .HasIndex(e => e.NormalizedName)
+            .IsUnique();
+
     }
 }

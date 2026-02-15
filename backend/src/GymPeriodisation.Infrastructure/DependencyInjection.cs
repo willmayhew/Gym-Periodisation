@@ -1,4 +1,5 @@
 ﻿using GymPeriodisation.Application.Interfaces;
+using GymPeriodisation.Application.RepositoryInterfaces;
 using GymPeriodisation.Application.ServiceInterfaces;
 using GymPeriodisation.Application.Services;
 using GymPeriodisation.Infrastructure.Persistence;
@@ -19,6 +20,8 @@ public static class DependencyInjection
         // Register repositories
         services.AddScoped<IWorkoutRepository, WorkoutRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IExerciseRepository, ExerciseRepository>();
+        services.AddScoped<IMuscleRepository, MuscleRepository>();
 
         // Register services
         services.AddScoped<IWorkoutService, WorkoutService>();

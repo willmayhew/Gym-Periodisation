@@ -11,5 +11,5 @@ public class Workout
     public string Comment { get; set; } = string.Empty;
 
 
-    public ICollection<WorkoutSet> Sets { get; set; } = new List<WorkoutSet>();
+    public ICollection<WorkoutExercise> WorkoutExercises { get; set; } = new List<WorkoutExercise>();
 }

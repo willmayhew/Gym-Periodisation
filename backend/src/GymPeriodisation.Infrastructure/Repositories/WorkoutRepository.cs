@@ -24,7 +24,6 @@ public class WorkoutRepository : IWorkoutRepository
     {
         return await _context.Workouts
             .Where(w => w.UserId == userId)
-            .Include(w => w.Sets)
             .ToListAsync();
     }
 
@@ -32,7 +31,11 @@ public class WorkoutRepository : IWorkoutRepository
     {
         return await _context.Workouts
             .Where(w => w.Id == workoutId)
-            .Include(w => w.Sets)
+            .Include(w => w.WorkoutExercises)
+            .ThenInclude(we => we.Exercise)
+            .ThenInclude(e => e.MuscleGroups)
+            .Include(w => w.WorkoutExercises)
+            .ThenInclude(we => we.Sets)
             .FirstOrDefaultAsync();
     }
 
