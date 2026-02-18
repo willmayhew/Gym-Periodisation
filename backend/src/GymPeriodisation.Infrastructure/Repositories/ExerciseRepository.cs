@@ -27,7 +27,7 @@ namespace GymPeriodisation.Infrastructure.Repositories
                 .FirstOrDefaultAsync(e => e.Id == exerciseId);
         }
 
-        public async Task<Exercise?> GetByNameAsync(string name)
+        public async Task<Exercise?> GetByNormalizedNameAsync(string name)
         {
             var normalizedName = Normalize(name);
 

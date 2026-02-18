@@ -1,4 +1,5 @@
 ﻿using GymPeriodisation.Application.DTOs.Workouts;
+using GymPeriodisation.Application.Exceptions;
 using GymPeriodisation.Application.Interfaces;
 using GymPeriodisation.Application.RepositoryInterfaces;
 using GymPeriodisation.Application.Services;
@@ -7,6 +8,7 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Xml.Linq;
 
 namespace GymPeriodisation.Tests.Services
 {
@@ -45,14 +47,14 @@ namespace GymPeriodisation.Tests.Services
             _workoutRepo.Setup(r => r.GetByIdAsync(1))
                 .ReturnsAsync(workout);
 
-            _exerciseRepo.Setup(r => r.GetByNameAsync("Bench Press"))
+            _exerciseRepo.Setup(r => r.GetByNormalizedNameAsync("benchpress"))
                 .ReturnsAsync(existingExercise);
 
             var dto = new SaveWorkoutDto
             {
                 Name = "Push Day",
                 Exercises = new List<WorkoutExerciseDto>
-        {
+            {
             new()
             {
                 Name = "Bench Press",
@@ -87,7 +89,7 @@ namespace GymPeriodisation.Tests.Services
             _workoutRepo.Setup(r => r.GetByIdAsync(1))
                 .ReturnsAsync(workout);
 
-            _exerciseRepo.Setup(r => r.GetByNameAsync("New Exercise"))
+            _exerciseRepo.Setup(r => r.GetByNormalizedNameAsync("New Exercise"))
                 .ReturnsAsync((Exercise?)null);
 
             _muscleRepo.Setup(r => r.GetByIdsAsync(It.IsAny<List<int>>()))
@@ -126,46 +128,69 @@ namespace GymPeriodisation.Tests.Services
             _workoutRepo.Setup(r => r.GetByIdAsync(1))
                 .ReturnsAsync(workout);
 
-            await Assert.ThrowsAsync<Exception>(() =>
+            await Assert.ThrowsAsync<ValidationException>(() =>
                 _service.SaveWorkoutAsync(1, new SaveWorkoutDto()));
         }
 
         [Fact]
-        public async Task SaveWorkoutAsync_ClearsOldExercises()
+        public async Task SaveWorkoutAsync_OverwriteExercises()
         {
             var workout = new Workout
             {
                 Id = 1,
+                Name = "Result Exercise",
                 DateEnded = null,
                 WorkoutExercises = new List<WorkoutExercise>
-        {
-            new WorkoutExercise()
-        }
+                {
+                    new WorkoutExercise()
+                    {
+                        Exercise = new Exercise { Name = "Overwrite Exercise" },
+                        Sets = new List<WorkoutSet>
+                        {
+                            new() { Reps = 10, Weight = 100 }
+                        }
+                    },
+                    new WorkoutExercise
+                    {
+                        Exercise = new Exercise { Name = "Remove this Exercise" },
+                        Sets = new List<WorkoutSet>
+                        {
+                            new() { Reps = 12, Weight = 50 }
+                        }
+                    }
+                }
             };
 
             _workoutRepo.Setup(r => r.GetByIdAsync(1))
                 .ReturnsAsync(workout);
 
-            _exerciseRepo.Setup(r => r.GetByNameAsync(It.IsAny<string>()))
+            _exerciseRepo.Setup(r => r.GetByNormalizedNameAsync(It.IsAny<string>()))
                 .ReturnsAsync(new Exercise());
 
             var dto = new SaveWorkoutDto
             {
                 Name = "Test",
                 Exercises = new List<WorkoutExerciseDto>
-        {
-            new()
-            {
-                Name = "Existing",
-                MuscleGroupIds = new List<int>(),
-                Sets = new List<WorkoutSetDto>()
-            }
-        }
+                {
+                    new WorkoutExerciseDto
+                    {
+                        Name = "Overwrite Exercise",
+                        MuscleGroupIds = new List<int>(),
+                        Sets = new List<WorkoutSetDto>
+                        {
+                            new() { Reps = 8, Weight = 80 }
+                        }
+                    }
+                },
             };
 
             await _service.SaveWorkoutAsync(1, dto);
 
-            Assert.Single(workout.WorkoutExercises);
+            var updatedExercise = workout.WorkoutExercises.Single();
+            var updatedSet = updatedExercise.Sets.Single();
+
+            Assert.Equal(8, updatedSet.Reps);
+            Assert.Equal(80, updatedSet.Weight);
         }
 
 

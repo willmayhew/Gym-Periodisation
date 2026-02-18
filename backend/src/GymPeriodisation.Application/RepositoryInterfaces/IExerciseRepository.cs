@@ -8,7 +8,7 @@ namespace GymPeriodisation.Application.RepositoryInterfaces
     public interface IExerciseRepository
     {
         Task<Exercise?> GetByIdAsync(int exerciseId);
-        Task<Exercise?> GetByNameAsync(string name);
+        Task<Exercise?> GetByNormalizedNameAsync(string name);
         Task<Exercise?> AddAsync(Exercise exercise);
     }
 }

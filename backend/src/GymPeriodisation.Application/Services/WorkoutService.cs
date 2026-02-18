@@ -89,7 +89,7 @@ public class WorkoutService : IWorkoutService
             };
 
             exercise = await _exerciseRepository
-                .GetByNameAsync(exercise.NormalizedName);
+                .GetByNormalizedNameAsync(exercise.NormalizedName);
 
             // If not found → create it
             if (exercise == null)
